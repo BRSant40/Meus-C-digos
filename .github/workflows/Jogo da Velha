@@ -1,0 +1,98 @@
+######### TABULEIRO ######
+
+def tab(data):
+    for c in range(1, len(data) + 1):
+        if c % 3 == 0:
+            print(f'{list(data.values())[c - 1]}\n')
+        else:
+            print(f'{list(data.values())[c - 1]}', end='  /  ')
+
+
+##########################
+
+####### JOGADOR ALEATORIO ########
+
+def ranplayer():
+    from random import choice
+    players = ['PLAYER 1', 'PLAYER 2']
+    return choice(players)
+
+
+#################################
+
+####### VALIDADOR DE VITÓRIAS ######
+
+def win_validador(data):
+    #         MODOS DE VITÓRIA DE X -----------
+    if list(data.values())[0] == list(data.values())[1] == list(data.values())[2] == 'X' or list(data.values())[3] == \
+            list(data.values())[4] == list(data.values())[5] == 'X' or list(data.values())[6] == list(data.values())[
+        7] == list(data.values())[8] == 'X':
+        return 'WIN X'
+    elif list(data.values())[0] == list(data.values())[3] == list(data.values())[6] == 'X' or list(data.values())[1] == \
+            list(data.values())[4] == list(data.values())[7] == 'X' or list(data.values())[2] == list(data.values())[
+        5] == list(data.values())[8] == 'X':
+        return 'WIN X'
+    elif list(data.values())[0] == list(data.values())[4] == list(data.values())[8] == 'X' or list(data.values())[2] == \
+            list(data.values())[4] == list(data.values())[6] == 'X':
+        return 'WIN X'
+
+    #         MODOS DE VITÓRIA DE O ----------
+    if list(data.values())[0] == list(data.values())[1] == list(data.values())[2] == 'O' or list(data.values())[3] == \
+            list(data.values())[4] == list(data.values())[5] == 'O' or list(data.values())[6] == list(data.values())[
+        7] == list(data.values())[8] == 'O':
+        return 'WIN O'
+    elif list(data.values())[0] == list(data.values())[3] == list(data.values())[6] == 'O' or list(data.values())[1] == \
+            list(data.values())[4] == list(data.values())[7] == 'O' or list(data.values())[2] == list(data.values())[
+        5] == list(data.values())[8] == 'O':
+        return 'WIN O'
+    elif list(data.values())[0] == list(data.values())[4] == list(data.values())[8] == 'O' or list(data.values())[2] == \
+            list(data.values())[4] == list(data.values())[6] == 'O':
+        return 'WIN O'
+
+####################################
+
+####### FUNÇÃO EMPATE #########
+def draw(tabu):
+    vazios = 0
+    for c in tabu.values():
+        if c == '':
+            vazios += 1
+    if vazios == 0:
+        return 'EMPATE'
+
+################################
+print('\033[1;30m-------> \033[1;33mMAPA DO JOGO \033[1;30m<--------')
+print('\033[1;30mA  / B  / C\nD  / E  / F\nG  / H  / I')
+print(' ')
+tabuleiro = {'A': '', 'B': '', 'C': '', 'D': '', 'E': '', 'F': '', 'G': '', 'H': '', 'I': ''}
+from time import sleep
+while True:
+    for c in ['PLAYER 1', 'PLAYER 2']:
+        while True:
+            pos = str(input(f'\033[1;30m{c}, escolha uma posição(A á I): ')).upper()
+            if c == 'PLAYER 1':
+                if tabuleiro[pos] != '':
+                    print('\033[1;31mA POSIÇÃO SOLICITADA NÃO É PERMITIDA, FAVOR TENTAR NOVAMENTE!!')
+                else:
+                    tabuleiro[pos] = 'X'
+                    break
+            else:
+                if tabuleiro[pos] != '':
+                    print('\033[1;31mA POSIÇÃO SOLICITADA NÃO É PERMITIDA, FAVOR TENTAR NOVAMENTE!!')
+                else:
+                    tabuleiro[pos] = 'O'
+                    break
+            if win_validador(tabuleiro) == 'WIN X':
+                print('\033[1;34mJOGADOR 1 VENCEU!')
+                break
+            elif win_validador(tabuleiro) == 'WIN O':
+                print('\033[1;32mJOGADOR 2 VENCEU!')
+                break
+            else:
+                if draw(tabuleiro) == 'EMPATE':
+                    print('\033[1;30mEMPATE!! REINICIALIZANDO O JOGO...')
+                    sleep(3)
+                    tabuleiro = {'A': '', 'B': '', 'C': '', 'D': '', 'E': '', 'F': '', 'G': '', 'H': '', 'I': ''}
+                    tab(tabuleiro)
+                    continue
+        tab(tabuleiro)
