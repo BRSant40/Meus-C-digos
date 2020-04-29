@@ -1,9 +1,11 @@
 def embaralhar():
+
     from random import choice
     cartas = ['A', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
     return choice(cartas)
 
 def valor(cartas):
+
     tot = 0
     for c in cartas:
         if c == 'A':
@@ -16,6 +18,7 @@ def valor(cartas):
     return tot
 
 def point_win(player_tot, dealer_tot):
+
     if player_tot < 21 and dealer_tot < 21:
         if 21 - player_tot < 21 - dealer_tot:
             return 'JOGADOR VENCEU'
@@ -35,6 +38,7 @@ def point_win(player_tot, dealer_tot):
             return 'DEALER VENCEU'
 
 def check_condition(cartas, valor):
+
     if 'A' in cartas and 'J' in cartas and len(cartas) == 2 or 'A' in cartas and 'Q' in cartas and len(cartas) == 2 or 'A' in cartas and 'K' in cartas and len(cartas) == 2:
         return 'BLACKJACK'
 
@@ -48,17 +52,26 @@ def check_condition(cartas, valor):
         return 'PARAR'
 
 def card_win(player_condition, dealer_condition):
-    if player_condition == 'BLACKJACK' and dealer_condition == 'CONTINUAR' or player_condition == '21' and dealer_condition == 'CONTINUAR':
-        return 'PLAYER WIN'
-    elif dealer_condition == 'BLACKJACK' and player_condition == 'CONTINUAR' or dealer_condition == '21' and player_condition == 'CONTINUAR':
-        return 'DEALER WIN'
+
+    if player_condition == 'BLACKJACK' or player_condition == '21':
+        if dealer_condition == 'CONTINUAR' or dealer_condition == 'PARAR':
+            return 'PLAYER WIN'
+
+    elif dealer_condition == 'BLACKJACK' or dealer_condition == '21':
+        if player_condition == 'CONTINUAR' or dealer_condition == 'PARAR':
+            return 'DEALER WIN'
+
+    elif player_condition == 'CONINUAR' or 'PARAR' and dealer_condition == 'CONTINUAR' or 'PARAR':
+        return 'CONTINUE'
+
     else:
         return 'EMPATE'
 
-player_cards = [embaralhar()]
-dealer_cards = [embaralhar()]
+player_cards = [embaralhar(), embaralhar()]
+dealer_cards = [embaralhar(), embaralhar()]
 
 from time import sleep
+
 while True:
     sleep(2)
     player_tot = valor(player_cards)
@@ -68,6 +81,18 @@ while True:
     dealer_test = check_condition(dealer_cards, dealer_tot)
 
     print(f'\033[1;34mJogador: {player_cards} = {player_tot} & {player_test}\n\033[1;32mDealer: {dealer_cards[0]}\n')
+
+    ####### VERIFICAÇÃO DAS CARTAS ######
+    if card_win(player_test, dealer_test) == 'PLAYER WIN':
+        print('\033[1;34mJOGADOR VENCEU')
+        break
+    elif card_win(player_test, dealer_test) == 'DEALER WIN':
+        print('\033[1;32mDEALER VENCEU')
+        break
+    elif card_win(player_test, dealer_test) == 'EMPATE':
+        print('\033[1;30mEMPATE')
+        break
+    ######################################
 
     if player_test == 'CONTINUAR':
         print('\033[1;30mÉ aconselhável comprar mais cartas...')
@@ -84,22 +109,11 @@ while True:
         dealer_cards.append(embaralhar())
 
     if 'N' in acao and dealer_test != 'CONTINUAR':
-
-        if card_win(player_test, dealer_test) == 'PLAYER WIN':
+        if point_win(player_tot, dealer_tot) == 'JOGADOR VENCEU':
             print('\033[1;34mJOGADOR VENCEU')
             break
-
-        elif card_win(player_test, dealer_test) == 'DEALER WIN':
+        elif point_win(player_tot, dealer_tot) == 'DEALER VENCEU':
             print('\033[1;32mDEALER VENCEU')
             break
-
-        elif card_win(player_test, dealer_test) == 'EMPATE':
-            if point_win(player_tot, dealer_tot) == 'PLAYER VENCEU':
-                print('\033[1;34mJOGADOR VENCEU')
-                break
-
-            elif point_win(player_tot, dealer_tot) == 'DEALER VENCEU':
-                print('\033[1;32mDEALER VENCEU')
-                break
 
 print(f'\n\033[1;34mJogador: {player_cards} = {player_tot} & {player_test}\n\033[1;32mDealer: {dealer_cards} = {dealer_tot} & {dealer_test}\n')
