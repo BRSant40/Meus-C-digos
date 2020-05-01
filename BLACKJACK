@@ -127,5 +127,6 @@ while True:
         
         else:
             print('\n\033[1;30mEMPATE')
+            break
 
 print(f'\n\033[1;34mJogador: {player_cards} = {player_tot} & {player_test}\n\033[1;32mDealer: {dealer_cards} = {dealer_tot} & {dealer_test}\n')
