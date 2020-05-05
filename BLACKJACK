@@ -58,7 +58,7 @@ def card_win(player_condition, dealer_condition):
             return 'PLAYER WIN'
 
     elif dealer_condition == 'BLACKJACK' or dealer_condition == '21':
-        if player_condition == 'CONTINUAR' or dealer_condition == 'PARAR':
+        if player_condition == 'CONTINUAR' or player_condition == 'PARAR':
             return 'DEALER WIN'
 
     elif player_condition == 'CONINUAR' or 'PARAR' and dealer_condition == 'CONTINUAR' or 'PARAR':
